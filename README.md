@@ -3,7 +3,7 @@ This repo is a collection of CTF challenges and their solutions(if I could solve
 
 ## List of CTFs
 
-| CTF Name | Date | Link(CTFtime/Official)|
+| CTF Name | Date | Link(CTF Time/Official)|
 |:----:|:------------------------------------:|:------------------------------------------------------------------:|
 |[ApoorvCTF](./Apoorvctf) | 28 Feb. 2025 - 02 March 2025 | [CTF-Time](https://ctftime.org/event/2638)/[Official](https://ctf.iiitkottayam.ac.in/) |
 |[CactusCon13](./CactusCon13) | 14 Feb. 2025 - 15 Feb 2025 | CTF-Time/Official |
@@ -15,3 +15,10 @@ This repo is a collection of CTF challenges and their solutions(if I could solve
 |[KashiCTF](./kashictf) | 22 Feb. 2025 — 23 Feb 2025 | [CTF-Time](https://ctftime.org/event/2668/)/[Official](https://kashictf.iitbhucybersec.in/) |
 |[Pico-CTF 2025](./pico_25) | 7 Feb. 2025 — 17 Feb 2025 | CTF-Time/[Official](https://picoctf.org/) |
 
+
+## Other Practice Platforms
+
+- pwn.college
+- [Hack the Box](./hack_the_box/htb)
+- Crypto Hack
+- Pico Gym

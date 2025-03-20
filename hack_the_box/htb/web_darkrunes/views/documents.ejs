@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarkRune Designs - Documents</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>DarkRune Designs - Documents</h1>
+        <% if (documents.length===0) { %>
+            <p>No documents found.</p>
+            <% } else { %>
+                <ul>
+                    <% documents.forEach(document=> { %>
+                        <li style="display:flex; align-items:center; justify-content: space-between;">
+                            <div>
+                                <h3><%= document.id %></h3>
+                                <p>
+                                    <%= document.content %>
+                                </p>
+                                <p>
+                                    Signature: <%=document.integrity %>
+                                </p>
+                            </div>
+                            <div>
+                                <form action="/document/<%= document.id %>" method="GET">
+                                    <button type="submit">View</button>
+                                </form>
+                                <form action="/document/<%= document.id %>/delete" method="POST">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                        <% }); %>
+                </ul>
+                <% } %>
+                    <form action="/documents/new" method="GET">
+                        <button type="submit">Create New Document</button>
+                    </form>
+                    <p><a href="/">Back to Home</a></p>
+    </div>
+    <footer>
+        &copy; 2024 DarkRune Designs. All rights reserved.
+    </footer>
+</body>
+
+</html>
