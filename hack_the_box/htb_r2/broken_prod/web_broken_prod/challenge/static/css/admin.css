@@ -1,0 +1,282 @@
+HTML CSSResult Skip Results Iframe
+#wrapper {
+  padding-left: 0;
+}
+
+#sidebar-wrapper {
+  z-index: 1000;
+  position: fixed;
+  left: 250px;
+  width: 0;
+  height: 100%;
+  margin-left: -250px;
+  overflow-y: auto;
+  background: #282828;
+}
+
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+  position: absolute;
+  top: 0;
+  width: 450px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sidebar-nav li {
+  text-align: center;
+}
+
+.sidebar-nav li a {
+  display: block;
+  text-decoration: none;
+  color: #999999;
+  text-transform: uppercase;
+}
+
+.sidebar-nav li a:hover {
+  text-decoration: none;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-nav>.sidebar-brand {
+  height: 65px;
+  font-size: 18px;
+  line-height: 60px;
+}
+
+@media(min-width:850px) {
+  #wrapper {
+    padding-left: 450px;
+  }
+  #sidebar-wrapper {
+    width: 450px;
+  }
+  #page-content-wrapper {
+    padding: 20px;
+    position: relative;
+  }
+}
+
+
+/* Profile container */
+
+.profile {
+  margin: 20px 0;
+}
+
+.profile-userpic {
+  padding-top: 30px;
+  text-align: center;
+}
+
+.profile-userpic img {
+  float: none;
+  margin: 0 auto;
+  position: relative;
+  width: 250px;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 50%;
+  padding: 5px;
+  background: #4183D7;
+}
+
+.profile-usertitle {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.profile-usertitle-name {
+  color: #4183D7;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.profile-usertitle-job {
+  text-transform: uppercase;
+  color: #4183D7;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.profile-userbuttons {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.profile-userbuttons .btn {
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 20px;
+  margin-right: 5px;
+  margin-right: 0px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.profile-userbuttons .btn:hover {
+  box-shadow: 0 0 5px #ff0000;
+}
+
+
+/*card*/
+
+body {
+  background: #f2f2f2;
+  font-family: 'Poppins', sans-serif;
+}
+
+h3 {
+  font-family: 'Poppins', sans-serif;
+}
+
+.manage-box .box {
+  background: #FFF;
+  border-radius: 10px;
+  padding: 70px 10px;
+  margin: 20px 0px;
+  cursor: pointer;
+  transition: all 0.5s ease-out;
+}
+
+.manage-box .box:hover {
+  box-shadow: 0 0 30px #4183D7;
+}
+
+.manage-box .box .box-text {
+  margin: 20px 0px;
+  font-size: 15px;
+  line-height: 30px;
+}
+
+.manage-box .box .box-btn a {
+  text-decoration: none;
+  color: #4183D7;
+  font-size: 16px;
+}
+
+.bl {
+  color: #4183D7;
+}
+
+.b2 {
+  color: red;
+}
+
+.box-title {
+  margin-top: 20px;
+}
+
+.badge  {
+  border-radius: 0;
+  font-size: 11px;
+  font-weight: initial;
+  line-height: 1;
+  padding: .375rem .5625rem;
+  font-weight: $font-weight-medium;
+  
+}
+
+
+.badge-gradient-success {
+    background: -webkit-gradient(linear,left top,right top,from(#84d9d2),to(#07cdae));
+#07cdae;
+    color: #fff;
+}
+
+.badge-gradient-warning {
+    background: #ffd500;
+    color: #fff;
+}
+
+.badge-gradient-info {
+    background: #047edf;
+    color: #fff;
+}
+
+.badge-gradient-danger {
+    background: -webkit-gradient(linear,left top,right top,from(#ffbf96),to(#fe7096));
+    background: #fe7096;
+    color: #fff;
+}
+
+
+.card .card-body {
+    padding: 2.5rem;
+}
+
+.card .card-title {
+    color: #343a40;
+    margin-bottom: .75rem;
+    text-transform: capitalize;
+    font-weight: 500;
+    font-size: 1.125rem;
+}
+
+.add-items {
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.add-items input[type=text] {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    width: 100%;
+    background: transparent;
+}
+
+.add-items .btn, .add-items .fc button, .add-items .form-wizard .container>div:not(.content)>button, .add-items .swal2-modal .swal2-actions .swal2-styled, .add-items .swal2-modal .swal2-buttonswrapper .swal2-styled, .fc .add-items button, .form-wizard .add-items .container>div:not(.content)>button, .swal2-modal .swal2-actions .add-items .swal2-styled, .swal2-modal .swal2-buttonswrapper .add-items .swal2-styled {
+    margin-left: .5rem;
+}
+
+.list-wrapper {
+    max-height: 100%;
+}
+
+.list-wrapper ul {
+    padding: 0;
+    text-align: left;
+    list-style: none;
+    margin-bottom: 0;
+}
+
+.list-wrapper ul li {
+    font-size: .9375rem;
+    padding: .4rem 0;
+    border-bottom: 1px solid #ebedf2;
+}
+
+.list-wrapper ul li .form-check {
+    max-width: 90%;
+    margin-top: .25rem;
+    margin-bottom: .25rem;
+}
+
+.form-check .form-check-label {
+    min-height: 18px;
+    display: block;
+    margin-left: 1.75rem;
+    font-size: .875rem;
+    line-height: 1.5;
+}
+
+
+
+.form-check, .list-wrapper ul li .form-check .form-check-label {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+    white-space: nowrap;
+}
+
+.list-wrapper input[type=checkbox] {
+    margin-right: 15px;
+}

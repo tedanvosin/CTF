@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html {
+      --s: 100px; /* control the size*/
+      --c1: #070303;
+      --c2: #1e1e1e;
+      
+      --_g: #0000 90deg,var(--c1) 0;
+      background: 
+        conic-gradient(from 90deg at 2px 2px,var(--_g)),
+        conic-gradient(from 90deg at 1px 1px,var(--_g)),
+        var(--c2);
+      background-size: var(--s) var(--s), calc(var(--s)/5) calc(var(--s)/5);
+    }
+  </style>
+</head>
+
+<body class="text-white font-mono">
+  <div class="flex flex-col justify-between h-screen">
+    <div class="flex mx-auto mt-5 flex-row gap-8 font-semibold text-green-500">
+      <a href="/" class="hover:text-green-600 hover:tracking-wider transition-all">[ home ]</a>
+      <a href="/exploitation" class="hover:text-green-600 hover:tracking-wider transition-all">[ exploitation guide
+        ]</a>
+      <a href="#"
+        onclick="alert('\n\naccess denied\nreason: insufficient security clearance, administration has been notified.')"
+        class="text-red-500 hover:text-red-900 hover:tracking-wider transition-all">[ admin ]</a>
+    </div>
+
+    <div class="px-8 flex flex-col gap-5">
+        <main><%- body %></main>
+    </div>
+
+    <div class="">
+      <p class="text-gray-600">
+        release date: 2066-05-05<br />
+        client-side date: 2077-07-26<br />
+        accessing from: ANTARCTIC BUNKER, PLANET EARTH
+      </p>
+    </div>
+  </div>
+</body>
+
+</html>

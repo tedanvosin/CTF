@@ -1,0 +1,6 @@
+services:
+  ancient-monkey:
+    build: docker
+    restart: unless-stopped
+    ports:
+      - 1337:1337

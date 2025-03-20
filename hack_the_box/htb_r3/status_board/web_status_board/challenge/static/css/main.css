@@ -1,0 +1,16 @@
+body {
+  background: #fff;
+}
+
+.list-group-item {
+  border-color: #ddd;
+}
+
+.navbar-brand {
+  color: var(--px-app-nav-item-text-color, #4f6674) !important;
+}
+
+.navbar-dark {
+  color: var(--px-app-nav-item-text-color, #4f6674) !important;
+  background-color: var(--px-app-nav-background-color, #1a272d) !important;
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Status Board</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+</head>
+<body>
+
+
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+   <a class="navbar-brand" href="#">Status Board</a>
+   
+    <ul class="navbar-nav ml-auto d-flex">
+      <li class="nav-item active">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+    </ul>
+ </div>
+</nav>
+
+
+<main id="main-container">
+ 
+ 
+ <div class="hero-static bg-white">
+  <div class="content content-full">
+   <div class="px-3 py-5">
+    <div class="mb-5 text-center">
+
+     <p class="text-uppercase font-w700 font-size-sm text-muted">Status Page Admin</p>
+    </div>
+    <div class="row no-gutters d-flex justify-content-center">
+     <div class="col-md-6 col-xl-4">
+      <hr>
+      <table class="table table-striped table-hover table-bordered table-light border-info text-center">
+      	<tbody>
+       	<tr>
+       		<td>
+	        	Backend
+        	</td>
+        	<td>
+        		<select class="form-select">
+				  <option value="Operational" selected>Operational</option>
+				  <option value="Maintenance">Maintenance</option>
+				  <option value="Down">Down</option>
+				</select>
+       		</td>
+   		</tr>
+       	<tr>
+       		<td>
+	        	Frontend
+        	</td>
+        	<td>
+        		<select class="form-select">
+				  <option value="Operational" selected>Operational</option>
+				  <option value="Maintenance">Maintenance</option>
+				  <option value="Down">Down</option>
+				</select>
+       		</td>
+   		</tr>
+   		<tr>
+       		<td>
+	        	API
+        	</td>
+        	<td>
+        		<select class="form-select">
+				  <option value="Operational">Operational</option>
+				  <option value="Maintenance" selected>Maintenance</option>
+				  <option value="Down">Down</option>
+				</select>
+       		</td>
+   		</tr>
+   		<tr>
+       		<td>
+	        	Payments
+        	</td>
+        	<td>
+        		<select class="form-select">
+				  <option value="Operational" selected>Operational</option>
+				  <option value="Maintenance">Maintenance</option>
+				  <option value="Down">Down</option>
+				</select>
+       		</td>
+   		</tr>
+   		<tr>
+       		<td>
+	        	Helpdesk
+        	</td>
+        	<td>
+        		<select class="form-select">
+				  <option value="Operational">Operational</option>
+				  <option value="Maintenance">Maintenance</option>
+				  <option value="Down" selected>Down</option>
+				</select>
+       		</td>
+   		</tr>
+   		</tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+</main>
+
+</body>
+</html>
