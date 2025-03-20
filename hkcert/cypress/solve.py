@@ -1,6 +1,6 @@
 import os
 import requests
-from Cryptodome.Cipher import AES
+from Crypto.Cipher import AES
 import hashlib
 
 def get_nonce():
