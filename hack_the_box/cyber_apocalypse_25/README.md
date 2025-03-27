@@ -1,6 +1,5 @@
 # Cyber Apocalypse 2025 CTF
 
-
 |                   Challenge                   | Category | Solved |
 | :-------------------------------------------: | :------: | :----: |
 |          [Blessing](./pwn/blessing)           |   Pwn    |   No   |
