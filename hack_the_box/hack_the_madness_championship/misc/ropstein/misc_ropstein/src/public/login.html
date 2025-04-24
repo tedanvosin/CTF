@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROPstein v2.0 - Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Share Tech Mono', monospace;
+      background-color: black;
+    }
+
+    ::selection {
+      background-color: rgba(147, 51, 234, 0.3);
+      color: #d8b4fe;
+    }
+
+    /* Glitch effect */
+    @keyframes glitch {
+      0% {
+        text-shadow: 0.05em 0 0 #ff00ff, -0.05em -0.025em 0 #8b00ff;
+      }
+      14% {
+        text-shadow: 0.05em 0 0 #ff00ff, -0.05em -0.025em 0 #8b00ff;
+      }
+      15% {
+        text-shadow: -0.05em -0.025em 0 #ff00ff, 0.025em 0.025em 0 #8b00ff;
+      }
+      49% {
+        text-shadow: -0.05em -0.025em 0 #ff00ff, 0.025em 0.025em 0 #8b00ff;
+      }
+      50% {
+        text-shadow: 0.025em 0.05em 0 #ff00ff, 0.05em 0 0 #8b00ff;
+      }
+      99% {
+        text-shadow: 0.025em 0.05em 0 #ff00ff, 0.05em 0 0 #8b00ff;
+      }
+      100% {
+        text-shadow: -0.025em 0 0 #ff00ff, -0.025em -0.025em 0 #8b00ff;
+      }
+    }
+
+    .glitch-text {
+      animation: glitch 1s linear infinite;
+    }
+
+    /* Terminal window effect */
+    .terminal-window {
+      background-color: black;
+      border: 1px solid rgba(147, 51, 234, 0.3);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.2),
+                  inset 0 0 20px rgba(147, 51, 234, 0.1);
+    }
+
+    .terminal-header {
+      background-color: #111827;
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid rgba(147, 51, 234, 0.3);
+    }
+
+    .terminal-body {
+      padding: 1.5rem;
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(147, 51, 234, 0.03) 0px,
+        rgba(147, 51, 234, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+    }
+
+    /* Neon text effect */
+    .neon-text {
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(147, 51, 234, 0.5),
+                   0 0 20px rgba(147, 51, 234, 0.3),
+                   0 0 30px rgba(147, 51, 234, 0.1);
+    }
+
+    /* Scan line effect */
+    .scan-line {
+      background: linear-gradient(
+        to bottom,
+        rgba(147, 51, 234, 0) 0%,
+        rgba(147, 51, 234, 0.1) 50%,
+        rgba(147, 51, 234, 0) 100%
+      );
+      background-size: 100% 4px;
+      animation: scan 6s linear infinite;
+    }
+
+    @keyframes scan {
+      from { background-position: 0 0; }
+      to { background-position: 0 100%; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 relative text-purple-500">
+  <div class="absolute inset-0 scan-line pointer-events-none"></div>
+  <div id="errorMessage" class="fixed top-4 left-1/2 -translate-x-1/2 hidden">
+    <div class="terminal-window bg-black border-red-500/30">
+      <div class="terminal-body py-2 px-4 flex items-center gap-2">
+        <i data-lucide="alert-circle" class="w-5 h-5 text-red-500"></i>
+        <span class="text-red-400 error-glitch">ACCESS_DENIED::INVALID_CREDENTIALS</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="terminal-window max-w-md w-full">
+    <div class="terminal-header">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <i data-lucide="terminal" class="w-5 h-5 text-purple-400"></i>
+          <h3 class="text-sm neon-text">SYSTEM_ACCESS</h3>
+        </div>
+        <div class="flex items-center gap-2 text-purple-400/60 text-sm">
+          <span class="animate-pulse">●</span>
+          SECURE_CONNECTION
+        </div>
+      </div>
+    </div>
+    
+    <div class="terminal-body space-y-8">
+      <div class="text-center">
+        <i data-lucide="shield" class="mx-auto h-12 w-12 text-purple-400"></i>
+        <h2 class="mt-6 text-3xl glitch-text">
+          ROPstein_v2.0
+        </h2>
+        <p class="mt-2 text-sm text-purple-400/60">INITIALIZING_SECURE_ACCESS</p>
+      </div>
+
+      <form class="space-y-6" onsubmit="handleLogin(event)">
+        <div class="space-y-4">
+          <div>
+            <label class="sr-only" for="email">Email address</label>
+            <div class="relative">
+              <i data-lucide="mail" class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-purple-500"></i>
+              <input
+                id="email"
+                name="email"
+                type="text"
+                required
+                class="block w-full pl-10 pr-3 py-2 bg-gray-900/50 border border-purple-500/30 rounded-md text-purple-300 placeholder-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                placeholder="ENTER_USERNAME"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="sr-only" for="password">Password</label>
+            <div class="relative">
+              <i data-lucide="lock" class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-purple-500"></i>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                class="block w-full pl-10 pr-3 py-2 bg-gray-900/50 border border-purple-500/30 rounded-md text-purple-300 placeholder-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                placeholder="ENTER_PASSWORD"
+              />
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full flex justify-center py-2 px-4 border border-purple-500/30 rounded-md text-purple-300 bg-purple-500/20 hover:bg-purple-500/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors neon-text"
+        >
+          CONNECT
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+    });
+
+    function showError() {
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.classList.remove('hidden');
+      errorMessage.classList.add('error-message');
+      
+      // Hide the error message after 3 seconds
+      setTimeout(() => {
+        errorMessage.classList.add('hidden');
+        errorMessage.classList.remove('error-message');
+      }, 3000);
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      
+      const agentid = document.getElementById('email').value;
+      const passkey = document.getElementById('password').value;
+      
+      const payload = { agentid, passkey };
+
+      fetch('/api/v2/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json().then(data => ({ status: response.status, body: data })))
+      .then(result => {
+        if (result.status === 200) {
+          window.location.href = '/dashboard';
+        } else {
+          showError()
+        }
+      })
+      .catch(error => {
+        const errorMessage = document.getElementById('errorMessage');
+        alert('An error occurred. Please try again later.');
+      });
+    }
+  </script>
+</body>
+</html>

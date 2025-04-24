@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROPstein v2.0 - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Share Tech Mono', monospace;
+      background-color: black;
+    }
+    ::selection {
+      background-color: rgba(147, 51, 234, 0.3);
+      color: #d8b4fe;
+    }
+    /* Glitch effect */
+    @keyframes glitch {
+      0% { text-shadow: 0.05em 0 0 #ff00ff, -0.05em -0.025em 0 #8b00ff; }
+      14% { text-shadow: 0.05em 0 0 #ff00ff, -0.05em -0.025em 0 #8b00ff; }
+      15% { text-shadow: -0.05em -0.025em 0 #ff00ff, 0.025em 0.025em 0 #8b00ff; }
+      49% { text-shadow: -0.05em -0.025em 0 #ff00ff, 0.025em 0.025em 0 #8b00ff; }
+      50% { text-shadow: 0.025em 0.05em 0 #ff00ff, 0.05em 0 0 #8b00ff; }
+      99% { text-shadow: 0.025em 0.05em 0 #ff00ff, 0.05em 0 0 #8b00ff; }
+      100% { text-shadow: -0.025em 0 0 #ff00ff, -0.025em -0.025em 0 #8b00ff; }
+    }
+    .glitch-text {
+      animation: glitch 1s linear infinite;
+    }
+    /* Terminal window effect */
+    .terminal-window {
+      background-color: black;
+      border: 1px solid rgba(147, 51, 234, 0.3);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.2),
+                  inset 0 0 20px rgba(147, 51, 234, 0.1);
+    }
+    .terminal-header {
+      background-color: #111827;
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid rgba(147, 51, 234, 0.3);
+    }
+    .terminal-body {
+      padding: 1.5rem;
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(147, 51, 234, 0.03) 0px,
+        rgba(147, 51, 234, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+    }
+    /* Neon text effect */
+    .neon-text {
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(147, 51, 234, 0.5),
+                   0 0 20px rgba(147, 51, 234, 0.3),
+                   0 0 30px rgba(147, 51, 234, 0.1);
+    }
+    /* Scan line effect */
+    .scan-line {
+      background: linear-gradient(
+        to bottom,
+        rgba(147, 51, 234, 0) 0%,
+        rgba(147, 51, 234, 0.1) 50%,
+        rgba(147, 51, 234, 0) 100%
+      );
+      background-size: 100% 4px;
+      animation: scan 6s linear infinite;
+    }
+    @keyframes scan {
+      from { background-position: 0 0; }
+      to { background-position: 0 100%; }
+    }
+    .drag-active {
+      background-color: rgba(147, 51, 234, 0.1);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-black text-purple-500 relative overflow-hidden">
+  <div class="absolute inset-0 scan-line pointer-events-none"></div>
+  
+  <!-- Header -->
+  <header class="terminal-window">
+    <div class="terminal-header">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <i data-lucide="shield" class="w-8 h-8 text-purple-400"></i>
+          <h1 class="text-2xl glitch-text">ROPstein_v2.0</h1>
+        </div>
+        <div class="flex items-center gap-6">
+          <div class="flex items-center gap-3 text-purple-400/80">
+            <i data-lucide="wifi" class="w-4 h-4 animate-pulse"></i>
+            <span class="text-sm">NET::CONNECTED</span>
+          </div>
+          <div class="flex items-center gap-2 text-purple-400/80">
+            <i data-lucide="user" class="w-5 h-5"></i>
+            <span class="font-mono" id="userEmail">admin</span>
+          </div>
+          <button
+            onclick="handleLogout()"
+            class="flex items-center gap-2 px-4 py-2 bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors border border-red-500/30"
+          >
+            <i data-lucide="log-out" class="w-5 h-5"></i>
+            DISCONNECT
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8 relative z-10">
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="flex items-center gap-3">
+            <i data-lucide="hard-drive" class="w-5 h-5 text-purple-400"></i>
+            <h3 class="text-sm neon-text">STORAGE_METRICS</h3>
+          </div>
+        </div>
+        <div class="terminal-body">
+          <p class="text-3xl font-bold neon-text" id="totalBackups">0</p>
+          <p class="text-sm text-purple-400/60 mt-1">Total Backups</p>
+        </div>
+      </div>
+      
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="flex items-center gap-3">
+            <i data-lucide="database" class="w-5 h-5 text-purple-400"></i>
+            <h3 class="text-sm neon-text">DATA_SIZE</h3>
+          </div>
+        </div>
+        <div class="terminal-body">
+          <p class="text-3xl font-bold neon-text" id="totalSize">0</p>
+          <p class="text-sm text-purple-400/60 mt-1">Total Storage</p>
+        </div>
+      </div>
+
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="flex items-center gap-3">
+            <i data-lucide="clock" class="w-5 h-5 text-purple-400"></i>
+            <h3 class="text-sm neon-text">LAST_BACKUP</h3>
+          </div>
+        </div>
+        <div class="terminal-body">
+          <p class="text-xl neon-text" id="lastBackup">NO_DATA</p>
+          <p class="text-sm text-purple-400/60 mt-1">Timestamp</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Area -->
+    <div class="terminal-window mb-8">
+      <div class="terminal-header">
+        <div class="flex items-center gap-3">
+          <i data-lucide="upload" class="w-5 h-5 text-purple-400"></i>
+          <h3 class="text-sm neon-text">UPLOAD_INTERFACE</h3>
+        </div>
+      </div>
+      <div
+        id="dropZone"
+        class="terminal-body"
+        ondragenter="handleDrag(event)"
+        ondragleave="handleDrag(event)"
+        ondragover="handleDrag(event)"
+        ondrop="handleDrop(event)"
+      >
+        <div class="text-center py-8">
+          <i data-lucide="upload" class="w-16 h-16 mx-auto mb-4 text-purple-400"></i>
+          <p class="text-xl mb-4 neon-text">DRAG_FILES_HERE</p>
+          <p class="text-purple-400/60 mb-4">- OR -</p>
+          <label class="inline-flex items-center px-6 py-3 bg-purple-500/20 text-purple-300 rounded-lg cursor-pointer hover:bg-purple-500/30 transition-colors border border-purple-500/50">
+            <i data-lucide="terminal" class="w-5 h-5 mr-2"></i>
+            SELECT_FILES
+            <input type="file" class="hidden" multiple onchange="handleFileInput(event)" />
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Backups List -->
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <i data-lucide="database" class="w-5 h-5 text-purple-400"></i>
+            <h3 class="text-sm neon-text">BACKUP_ARCHIVES</h3>
+          </div>
+          <button
+            id="clearAllBtn"
+            onclick="clearAllBackups()"
+            class="hidden items-center gap-2 px-3 py-1 bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors border border-red-500/30 text-sm"
+          >
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+            PURGE_ALL
+          </button>
+        </div>
+      </div>
+      <div class="terminal-body">
+        <div id="backupsList" class="space-y-4">
+          <div class="text-center py-8 text-purple-400/40 font-mono">
+            LOADING_BACKUPS...
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let backups = [];
+
+    // Fetch backups for the logged in user from the backend
+    function loadBackups() {
+      fetch('/api/v2/backups', { method: 'GET' })
+        .then(response => response.json())
+        .then(data => {
+          backups = data.map(item => {
+            // Store the raw file size (in bytes)
+            const fileSize = item.file_size;
+            // If the file is less than 1 MB, display in KB; otherwise, in MB.
+            const displaySize = fileSize < 1024 * 1024 
+              ? (fileSize / 1024).toFixed(2) + ' KB' 
+              : (fileSize / (1024 * 1024)).toFixed(2) + ' MB';
+            return {
+              id: item.id,
+              name: item.filename,
+              fileSize: fileSize,
+              displaySize: displaySize,
+              timestamp: new Date(item.timestamp).toLocaleString()
+            };
+          });
+          updateStats();
+        })
+        .catch(err => {
+          console.error('Error loading backups:', err);
+          document.getElementById('backupsList').innerHTML = `
+            <div class="text-center py-8 text-purple-400/40 font-mono">
+              ERROR_LOADING_BACKUPS
+            </div>
+          `;
+        });
+    }
+
+    function updateStats() {
+      document.getElementById('totalBackups').textContent = backups.length;
+      
+      // Sum up the total file size (in bytes) and then convert to a human-friendly display
+      const totalBytes = backups.reduce((acc, backup) => acc + backup.fileSize, 0);
+      const totalSize = totalBytes < 1024 * 1024 
+        ? (totalBytes / 1024).toFixed(2) + ' KB' 
+        : (totalBytes / (1024 * 1024)).toFixed(2) + ' MB';
+      document.getElementById('totalSize').textContent = totalSize;
+      
+      document.getElementById('lastBackup').textContent = backups.length > 0 ? backups[backups.length - 1].timestamp : 'NO_DATA';
+      
+      const clearAllBtn = document.getElementById('clearAllBtn');
+      clearAllBtn.style.display = backups.length > 0 ? 'flex' : 'none';
+      
+      const backupsList = document.getElementById('backupsList');
+      if (backups.length === 0) {
+        backupsList.innerHTML = `
+          <div class="text-center py-8 text-purple-400/40 font-mono">
+            NO_BACKUPS_FOUND
+          </div>
+        `;
+      } else {
+        backupsList.innerHTML = backups.map(backup => `
+          <div class="flex items-center justify-between bg-gray-900/50 p-4 rounded-lg hover:bg-gray-800/50 transition-colors border border-purple-500/20">
+            <div class="flex items-center gap-4">
+              <i data-lucide="terminal" class="text-purple-400"></i>
+              <div>
+                <p class="font-mono text-purple-300">${backup.name}</p>
+                <p class="text-sm text-purple-400/60 font-mono">
+                  ${backup.displaySize} • ${backup.timestamp}
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <!-- Download button -->
+              <a href="/api/v2/download/${backup.id}" class="p-2 hover:bg-green-500/20 rounded-lg transition-colors" title="Download">
+                <i data-lucide="download" class="w-5 h-5 text-green-400"></i>
+              </a>
+              <!-- Delete button (if implemented on the backend) -->
+              <button
+                onclick="deleteBackup('${backup.id}')"
+                class="p-2 hover:bg-red-500/20 rounded-lg transition-colors"
+                title="Delete"
+              >
+                <i data-lucide="trash-2" class="w-5 h-5 text-red-400"></i>
+              </button>
+            </div>
+          </div>
+        `).join('');
+        lucide.createIcons();
+      }
+    }
+
+    // Handle file drag/drop
+    function handleDrag(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const dropZone = document.getElementById('dropZone');
+      if (e.type === "dragenter" || e.type === "dragover") {
+        dropZone.classList.add('drag-active');
+      } else {
+        dropZone.classList.remove('drag-active');
+      }
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      document.getElementById('dropZone').classList.remove('drag-active');
+      const files = Array.from(e.dataTransfer.files);
+      processFiles(files);
+    }
+
+    function handleFileInput(e) {
+      const files = Array.from(e.target.files);
+      processFiles(files);
+    }
+
+    function processFiles(files) {
+      files.forEach(file => {
+        uploadFile(file);
+      });
+    }
+
+    // Upload file to backend and reload backups on success
+    function uploadFile(file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64Content = e.target.result.split(',')[1];
+        const payload = {
+          filename: file.name,
+          content: base64Content
+        };
+
+        fetch('/api/v2/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(result => {
+          if (result.status === 200) {
+            loadBackups();
+          } else {
+            alert(result.body.message || 'File upload failed for ' + file.name);
+          }
+        })
+        .catch(err => {
+          console.error('Upload error:', err);
+          alert('Error uploading ' + file.name);
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Optionally, delete a backup locally (if you implement a DELETE endpoint, adjust accordingly)
+    function deleteBackup(id) {
+      // For demonstration, we remove it from the UI.
+      backups = backups.filter(backup => backup.id != id);
+      updateStats();
+    }
+
+    function clearAllBackups() {
+      // For demonstration, we clear the UI. Ideally, create a backend endpoint to clear backups.
+      backups = [];
+      updateStats();
+    }
+
+    function handleLogout() {
+      window.location.href = '/';
+    }
+
+    // Initialize Lucide icons and load backups on DOM load
+    document.addEventListener('DOMContentLoaded', function() {
+      lucide.createIcons();
+      loadBackups();
+    });
+  </script>
+</body>
+</html>

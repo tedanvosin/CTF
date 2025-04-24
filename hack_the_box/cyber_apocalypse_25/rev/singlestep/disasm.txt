@@ -681,3 +681,28 @@ nop
 leave
 ret
 
+182c:       endbr64
+1845:       push   rbp
+1861:       mov    rbp, rsp
+1882:       sub    rsp, 0x20
+189e:       mov    QWORD PTR [rbp-0x8], rdi
+18ba:       mov    QWORD PTR [rbp-0x10], rsi
+18d6:       mov    QWORD PTR [rbp-0x18], rdx
+18f2:       mov    rax, QWORD PTR [rbp-0x8]
+190e:       mov    rdx, QWORD PTR [rbp-0x10]
+1930:       mov    QWORD PTR [rax], rdx
+1951:       mov    rax, QWORD PTR [rbp-0x8]
+196d:       mov    rdx, QWORD PTR [rbp-0x18]
+1989:       mov    QWORD PTR [rax+0x8], rdx
+19a5:       mov    rax, QWORD PTR [rbp-0x10]
+19c8:       imul   rax, QWORD PTR [rbp-0x18]
+19f3:       mov    esi, 0x8
+1a1d:       mov    rdi, rax
+1a45:       call   0x11f0
+1a6f:       mov    rdx, rax
+1a90:       mov    rax, QWORD PTR [rbp-0x8]
+1aac:       mov    QWORD PTR [rax+0x10], rdx
+1ac5:       nop
+1ad8:       leave
+1ae2:       ret
+

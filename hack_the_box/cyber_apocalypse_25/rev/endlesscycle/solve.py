@@ -36,5 +36,6 @@ for i in range(0, len(bytes)):
 print(disasm(code[:0x84]))
 flag = code[0x84:]
 xor_key = p32(0xbeefcafe)
+
 for i in range(0, len(flag)):
      print(chr(flag[i] ^ xor_key[i % 4]), end='')

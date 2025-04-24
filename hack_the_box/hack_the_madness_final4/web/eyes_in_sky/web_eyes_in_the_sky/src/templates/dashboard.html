@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evil Core - Security Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body class="bg-gray-900">
+    <nav class="glass-effect border-b border-gray-700">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center space-x-4">
+            <h1 class="text-2xl font-black text-red-500">EVIL CORE</h1>
+            <span class="text-xl font-bold text-white">Security Dashboard</span>
+          </div>
+          <div class="flex items-center">
+            <button id="logoutBtn" class="ml-4 px-4 py-2 text-sm text-red-400 hover:text-red-300 transition duration-150 ease-in-out">
+              <span class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <div id="flag-container" class="hidden bg-green-900/50 border-2 border-green-500 rounded-lg p-6 m-4 text-center text-green-300 font-bold text-xl shadow-lg">
+      </div>
+      <div id="cameraGrid" class="camera-grid">
+      </div>
+    </main>
+    <script type="module" src="/js/dashboard.js"></script>
+  </body>
+</html>

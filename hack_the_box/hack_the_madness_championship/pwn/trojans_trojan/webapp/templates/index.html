@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes App</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #ff9a3c;
+            --background-color: #f8f9fa;
+            --card-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --text-color: #333333;
+            --light-gray: #e9ecef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .note-card {
+            background-color: var(--card-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+        
+        .note-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            word-break: break-word;
+        }
+        
+        .note-content {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-color);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            word-break: break-word;
+        }
+        
+        .add-note-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            cursor: pointer;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        
+        .add-note-btn:hover {
+            background-color: #3a5a8a;
+            transform: scale(1.05);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: var(--card-color);
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+        }
+        
+        .close-btn:hover {
+            color: var(--text-color);
+        }
+        
+        .modal-title {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .note-detail-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            word-break: break-word;
+        }
+        
+        .note-detail-content {
+            font-size: 1rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 10px 0;
+            border-top: 1px solid var(--light-gray);
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5a8a;
+        }
+        
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: var(--text-color);
+            border: 1px solid #dee2e6;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--light-gray);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px 0;
+            color: #6c757d;
+        }
+        
+        .empty-state-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+            color: #dee2e6;
+        }
+        
+        .empty-state-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+        }
+        
+        .edit-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--background-color);
+            border: none;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .note-card:hover .edit-btn {
+            opacity: 1;
+        }
+        
+        .edit-icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .note-detail-content {
+                max-height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Notes</h1>
+        </header>
+        
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+        </div>
+        
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">📝</div>
+            <div class="empty-state-text">No notes yet</div>
+        </div>
+        
+        <div id="notes-grid" class="notes-grid"></div>
+    </div>
+    
+    <button id="add-note-btn" class="add-note-btn">+</button>
+    
+    <div id="note-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="note-detail-title" class="note-detail-title"></h2>
+            <div id="note-detail-content" class="note-detail-content"></div>
+            <div class="modal-actions">
+                <button id="edit-note-btn" class="btn btn-primary">Edit</button>
+                <button id="delete-note-btn" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="modal-title">Edit Note</h2>
+            <form id="edit-form">
+                <div class="form-group">
+                    <label for="edit-title" class="form-label">Title</label>
+                    <input type="text" id="edit-title" class="form-control" required>
+                    <div id="edit-title-error" class="error-message">A note with this title already exists.</div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-content" class="form-label">Content</label>
+                    <textarea id="edit-content" class="form-control" required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary edit-cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="create-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="modal-title">Create New Note</h2>
+            <form id="create-form">
+                <div class="form-group">
+                    <label for="create-title" class="form-label">Title</label>
+                    <input type="text" id="create-title" class="form-control" required>
+                    <div id="create-title-error" class="error-message">A note with this title already exists.</div>
+                </div>
+                <div class="form-group">
+                    <label for="create-content" class="form-label">Content</label>
+                    <textarea id="create-content" class="form-control" required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary create-cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const notesGrid = document.getElementById('notes-grid');
+            const loading = document.getElementById('loading');
+            const emptyState = document.getElementById('empty-state');
+            const noteModal = document.getElementById('note-modal');
+            const noteDetailTitle = document.getElementById('note-detail-title');
+            const noteDetailContent = document.getElementById('note-detail-content');
+            const closeBtns = document.querySelectorAll('.close-btn');
+            const deleteNoteBtn = document.getElementById('delete-note-btn');
+            const addNoteBtn = document.getElementById('add-note-btn');
+            const editNoteBtn = document.getElementById('edit-note-btn');
+            
+            const editModal = document.getElementById('edit-modal');
+            const editForm = document.getElementById('edit-form');
+            const editTitle = document.getElementById('edit-title');
+            const editContent = document.getElementById('edit-content');
+            const editTitleError = document.getElementById('edit-title-error');
+            const editCancelBtn = document.querySelector('.edit-cancel-btn');
+            
+            const createModal = document.getElementById('create-modal');
+            const createForm = document.getElementById('create-form');
+            const createTitle = document.getElementById('create-title');
+            const createContent = document.getElementById('create-content');
+            const createTitleError = document.getElementById('create-title-error');
+            const createCancelBtn = document.querySelector('.create-cancel-btn');
+            
+            let currentNoteId = null;
+            let currentNoteTitle = null;
+            let allNotes = [];
+            
+            function base64Encode(str) {
+                return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+                    return String.fromCharCode(parseInt(p1, 16));
+                }));
+            }
+            
+            function base64Decode(str) {
+                return decodeURIComponent(Array.prototype.map.call(atob(str), (c) => {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+            }
+
+            function titleExists(title, currentTitle = null) {
+                if (currentTitle && title.toLowerCase() === currentTitle.toLowerCase()) {
+                    return false;
+                }
+                
+                return allNotes.some(note => {
+                    const noteTitle = base64Decode(note[1]).toLowerCase();
+                    return noteTitle === title.toLowerCase();
+                });
+            }
+            
+            async function fetchAllNotes() {
+                try {
+                    loading.style.display = 'flex';
+                    notesGrid.innerHTML = '';
+                    
+                    const response = await fetch('/get_all');
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch notes');
+                    }
+                    
+                    allNotes = await response.json();
+                    
+                    loading.style.display = 'none';
+                    
+                    if (allNotes.length === 0) {
+                        emptyState.style.display = 'block';
+                    } else {
+                        emptyState.style.display = 'none';
+                        renderNotes(allNotes);
+                    }
+                } catch (error) {
+                    console.error('Error fetching notes:', error);
+                    loading.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    emptyState.querySelector('.empty-state-text').textContent = 'Failed to load notes';
+                }
+            }
+            
+            async function fetchNote(title) {
+                try {
+                    const encodedTitle = encodeURIComponent(base64Encode(title));
+                    const response = await fetch(`/get?title=${encodedTitle}`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch note');
+                    }
+                    
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching note:', error);
+                    return null;
+                }
+            }
+            
+            async function createNote(title, content) {
+                try {
+                    const encodedTitle = encodeURIComponent(base64Encode(title));
+                    const encodedContent = encodeURIComponent(base64Encode(content));
+                    
+                    const response = await fetch(`/create?title=${encodedTitle}&content=${encodedContent}`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to create note');
+                    }
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Error creating note:', error);
+                    return false;
+                }
+            }
+            
+            async function updateNote(oldTitle, newTitle, newContent) {
+                try {
+                    const encodedOldTitle = encodeURIComponent(base64Encode(oldTitle));
+                    const encodedNewTitle = encodeURIComponent(base64Encode(newTitle));
+                    const encodedNewContent = encodeURIComponent(base64Encode(newContent));
+                    
+                    const response = await fetch(`/change?old_title=${encodedOldTitle}&new_title=${encodedNewTitle}&new_content=${encodedNewContent}`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to update note');
+                    }
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Error updating note:', error);
+                    return false;
+                }
+            }
+            
+            function renderNotes(notes) {
+                notesGrid.innerHTML = '';
+                
+                notes.forEach(note => {
+                    const title = base64Decode(note[1]);
+                    const content = base64Decode(note[2]);
+                    
+                    const noteCard = document.createElement('div');
+                    noteCard.className = 'note-card';
+                    noteCard.innerHTML = `
+                        <h3 class="note-title">${title}</h3>
+                        <p class="note-content">${content}</p>
+                    `;
+                    
+                    noteCard.addEventListener('click', () => openNoteDetail(title, content));
+                    
+                    notesGrid.appendChild(noteCard);
+                });
+            }
+            
+            function openNoteDetail(title, content) {
+                currentNoteId = base64Encode(title);
+                currentNoteTitle = title;
+                noteDetailTitle.textContent = title;
+                noteDetailContent.textContent = content;
+                noteModal.style.display = 'flex';
+            }
+            
+            function openEditModal() {
+                editTitle.value = currentNoteTitle;
+                editContent.value = noteDetailContent.textContent;
+                editTitleError.style.display = 'none';
+                noteModal.style.display = 'none';
+                editModal.style.display = 'flex';
+            }
+            
+            function openCreateModal() {
+                createTitle.value = '';
+                createContent.value = '';
+                createTitleError.style.display = 'none';
+                createModal.style.display = 'flex';
+            }
+            
+            function closeModals() {
+                noteModal.style.display = 'none';
+                editModal.style.display = 'none';
+                createModal.style.display = 'none';
+                currentNoteId = null;
+                currentNoteTitle = null;
+            }
+            
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', closeModals);
+            });
+            
+            window.addEventListener('click', (event) => {
+                if (event.target === noteModal || event.target === editModal || event.target === createModal) {
+                    closeModals();
+                }
+            });
+
+            createTitle.addEventListener('input', function() {
+                const title = this.value.trim();
+                if (title && titleExists(title)) {
+                    createTitleError.style.display = 'block';
+                } else {
+                    createTitleError.style.display = 'none';
+                }
+            });
+            
+            editTitle.addEventListener('input', function() {
+                const title = this.value.trim();
+                if (title && titleExists(title, currentNoteTitle)) {
+                    editTitleError.style.display = 'block';
+                } else {
+                    editTitleError.style.display = 'none';
+                }
+            });
+            
+            deleteNoteBtn.addEventListener('click', async () => {
+                if (!currentNoteId) return;
+                
+                try {
+                    const response = await fetch(`/delete?title=${encodeURIComponent(currentNoteId)}`);
+                    
+                    if (response.ok) {
+                        closeModals();
+                        fetchAllNotes();
+                    } else {
+                        alert('Failed to delete note');
+                    }
+                } catch (error) {
+                    console.error('Error deleting note:', error);
+                    alert('Failed to delete note');
+                }
+            });
+            
+            editNoteBtn.addEventListener('click', openEditModal);
+            
+            editCancelBtn.addEventListener('click', () => {
+                editModal.style.display = 'none';
+                noteModal.style.display = 'flex';
+            });
+            
+            createCancelBtn.addEventListener('click', () => {
+                createModal.style.display = 'none';
+            });
+            
+            addNoteBtn.addEventListener('click', openCreateModal);
+            
+            createForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const title = createTitle.value.trim();
+                const content = createContent.value.trim();
+                
+                if (!title || !content) {
+                    alert('Title and content are required');
+                    return;
+                }
+
+                if (titleExists(title)) {
+                    createTitleError.style.display = 'block';
+                    return;
+                }
+                
+                const success = await createNote(title, content);
+                
+                if (success) {
+                    closeModals();
+                    fetchAllNotes();
+                } else {
+                    alert('Failed to create note');
+                }
+            });
+            
+            editForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const newTitle = editTitle.value.trim();
+                const newContent = editContent.value.trim();
+                
+                if (!newTitle || !newContent) {
+                    alert('Title and content are required');
+                    return;
+                }
+
+                if (titleExists(newTitle, currentNoteTitle)) {
+                    editTitleError.style.display = 'block';
+                    return;
+                }
+                
+                const success = await updateNote(currentNoteTitle, newTitle, newContent);
+                
+                if (success) {
+                    closeModals();
+                    fetchAllNotes();
+                } else {
+                    alert('Failed to update note');
+                }
+            });
+            
+            fetchAllNotes();
+        });
+    </script>
+</body>
+</html>

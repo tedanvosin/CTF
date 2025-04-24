@@ -25,7 +25,7 @@ def main():
                     
                     out += bytes.fromhex(query_name[:-1])
 
-    #print(out.decode())
+    print(out.decode())
 
     out = out.split(b'\n')
     #print(out)
